@@ -14,6 +14,7 @@ import cst.unitbvfmi2026.MainActivity
 import cst.unitbvfmi2026.ui.screens.HomeScreen
 import cst.unitbvfmi2026.ui.screens.LogInScreen
 import cst.unitbvfmi2026.ui.screens.RegisterScreen
+import cst.unitbvfmi2026.ui.screens.UsersScreen
 import cst.unitbvfmi2026.viewModels.AuthViewModel
 
 @Composable
@@ -61,17 +62,26 @@ fun AuthenticationNavigation(
                 errorMessage = authState.errorMessage
             )
         }
+        composable("usersScreen")
+        {
+            UsersScreen()
+        }
         composable("homeScreen") {
             //HomeScreen(authViewModel::logout)//referinta catre logout din AuthViewModel, care are aceeasi semnatura => nu mai trebuie declarata alta functie lambda pt asta
             val context = LocalContext.current//definit de componenta in care se afla authNav
-            HomeScreen{
-                authViewModel.logout()
-                val intent = Intent(context, MainActivity::class.java)
-                (context as? Activity)?.apply { //cast ca sa ne asiguram ca context-ul este o activitate; as? = daca crapa cast-ul, return null => nu se apeleaza apply
-                    this.startActivity(intent)//this = val care s-a accesat cu succes inaintea instructiunii de apply; porneste activ pe baza intentului definit
-                    this.finish()//distruge activ curenta pt a nu ramane in backstack
+            HomeScreen(
+                goToUsers = {
+                    navController.navigate("usersScreen")
+                },
+                logout = {
+                    authViewModel.logout()
+                    val intent = Intent(context, MainActivity::class.java)
+                    (context as? Activity)?.apply { //cast ca sa ne asiguram ca context-ul este o activitate; as? = daca crapa cast-ul, return null => nu se apeleaza apply
+                        this.startActivity(intent)//this = val care s-a accesat cu succes inaintea instructiunii de apply; porneste activ pe baza intentului definit
+                        this.finish()//distruge activ curenta pt a nu ramane in backstack
+                    }
                 }
-            }
+            )
         }
     }
 }

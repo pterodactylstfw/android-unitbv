@@ -18,7 +18,8 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HomeScreen(
-    logout: () -> Unit = {}
+    logout: () -> Unit = {},
+    goToUsers: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier
@@ -41,6 +42,15 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text("Log out")
+        }
+        Spacer(
+            modifier = Modifier.height(24.dp)
+        )
+        Button(
+            onClick = goToUsers,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Text("Go to Users")
         }
     }
 }
